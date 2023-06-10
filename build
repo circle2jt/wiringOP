@@ -147,7 +147,8 @@ select_boards()
 	export BOARD="${BOARD}"
 }
 
-sudo=${WIRINGPI_SUDO-sudo}
+sudo="" 
+# ${WIRINGPI_SUDO-sudo}
 
 if [ x$1 = "xclean" ]; then
   cd wiringPi
