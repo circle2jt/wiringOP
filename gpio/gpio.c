@@ -655,7 +655,9 @@ void doExport (int argc, char *argv [])
  */
 
 static void wfi (void)
-  { exit (0) ; }
+  { 
+    // exit (0) ; 
+  }
 
 void doWfi (int argc, char *argv [])
 {

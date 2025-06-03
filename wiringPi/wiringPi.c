@@ -2028,7 +2028,8 @@ int waitForInterrupt (int pin, int mS)
   	return -1;
   }
 
-  return x ;
+  int value = c - '0';  // Now it's 0 or 1
+  return x * 10 + value ;
 }
 
 
@@ -2048,11 +2049,18 @@ static void *interruptHandler (UNU void *arg)
 
   myPin   = pinPass ;
   pinPass = -1 ;
+  int rs ;
+  int value;
 
-  for (;;)
-    if (waitForInterrupt (myPin, -1) > 0)
+  for (;;) {
+    rs = waitForInterrupt (myPin, -1);
+    if (rs > 0) {
+      value = rs % 10;
+      printf("%d\n", value);
+      fflush(stdout);  // force flush
       isrFunctions [myPin] () ;
-
+    }
+  }
   return NULL ;
 }
 
@@ -2143,8 +2151,8 @@ int wiringPiISR (int pin, int mode, void (*function)(void))
   ioctl (sysFds [bcmGpioPin], FIONREAD, &count) ;
   for (i = 0 ; i < count ; ++i){
     ret = read (sysFds [bcmGpioPin], &c, 1) ;
-	if (ret < 0)
-		return -1;
+    if (ret < 0)
+      return -1;
   }
 
   isrFunctions [pin] = function ;
